@@ -1,251 +1,162 @@
-🧪 BƯỚC 1 – TEST (BẮT BUỘC)
+# Foody Review Scraping Pipeline  
+*A Large-Scale, Login-Aware Web Data Collection Framework for Restaurant Reviews*
 
-👉 Luôn chạy test trước khi scrape hàng loạt
+---
 
-cd review
-python test_review.py
+## Abstract
 
-🔐 QUY TRÌNH ĐĂNG NHẬP FOODY (BẮT BUỘC)
+This repository presents a scalable web scraping pipeline for collecting large-scale restaurant review data from Foody.vn. Unlike traditional crawlers, the system accounts for **authentication constraints, dynamic content loading, and anti-scraping mechanisms** by integrating browser-based interaction with controlled user simulation. The pipeline supports **checkpointing, fault tolerance, and resumability**, enabling efficient collection of hundreds of thousands of reviews across thousands of restaurants.
 
-Khi chạy script:
+---
 
-Một cửa sổ Chromium sẽ mở ra
+## 🎯 Objective
 
-Script sẽ dừng và hiển thị:
+The goal of this project is to construct a **high-quality review dataset** for downstream tasks such as:
 
-👉 Vui lòng đăng nhập Foody trong browser
+- Sentiment analysis  
+- Recommendation systems  
+- User behavior modeling  
+- Natural language processing on user-generated content  
 
-TESTER PHẢI:
+---
 
-Đăng nhập Foody bằng tài khoản thật
+## System Design
 
-Có thể đăng nhập bằng:
+### 1. Authentication-Aware Crawling
+- Requires manual login via a real browser session  
+- Ensures access to full review data  
 
-Email / Password
+### 2. Dynamic Content Handling
+- Simulates real user behavior (scrolling, delays)  
+- Extracts client-side rendered reviews  
 
-Google
+### 3. Scalability & Robustness
+- Checkpoint-based progress tracking  
+- Resume after interruption  
+- Automatic retry on failures  
 
-Facebook
+### 4. Data Consistency
+- Structured JSON output  
+- Unified schema across all entries  
 
-Sau khi đăng nhập thành công:
+---
 
-Phải thấy avatar hoặc tên user trên trang Foody
+## Pipeline Overview
+```mermaid
+flowchart TD
+    A[Input: Restaurant URLs] --> B[Browser + Login]
+    B --> C[Scroll Loading]
+    C --> D[Extraction]
+    D --> E[Checkpoint + Logging]
+    E --> F[Output JSON]
+```
 
-Quay lại Terminal và nhấn ENTER
+---
 
-❗ NẾU KHÔNG ĐĂNG NHẬP
+## Dataset Description
 
-Script vẫn chạy
+- **Domain:** Restaurant reviews (Hanoi, Vietnam)  
+- **Scale:**
+  - ~7,500 restaurants  
+  - Hundreds of thousands of reviews  
 
-Nhưng kết quả sẽ là:
+### Attributes:
+- Review ID  
+- User ID  
+- Restaurant ID  
+- Rating  
+- Content  
+- Timestamp  
 
-🧾 Reviews scraped: 13
+---
 
+## Data Format
 
-👉 ĐÂY LÀ KẾT QUẢ SAI
-
-✅ DẤU HIỆU CHẠY ĐÚNG
-
-Trong Terminal phải thấy:
-
-🧾 Reviews scraped: 40
-🧾 Reviews scraped: 85
-🧾 Reviews scraped: 120
-
-
-👉 Lớn hơn 13 review → OK
-
-🚀 CÁC SCRIPT CÓ SẴN
-1️⃣ test_review.py ⭐ BẮT ĐẦU TỪ ĐÂY
-
-Test 1 URL
-
-Xác nhận:
-
-Login Foody OK
-
-Scroll load review OK
-
-Dùng để debug
-
-2️⃣ scrape_review.py
-
-Chạy nhiều URL (số lượng ít)
-
-❌ Không checkpoint
-
-❌ Không resume
-
-Phù hợp demo / test nhỏ
-
-3️⃣ scrape_review_advanced.py ⭐ KHUYÊN DÙNG
-
-Chạy toàn bộ dữ liệu
-
-✅ Có checkpoint
-
-✅ Resume khi dừng
-
-✅ Auto retry
-
-Hiển thị progress & ETA
-
-Dùng cho production
-
-4️⃣ run.py
-
-Menu tương tác để chọn script
-
-Giống cấu trúc run.py của initData
-
-5️⃣ demo.py
-
-Hiển thị thống kê tổng quan review
-
-KHÔNG scrape
-
-📖 DOCUMENTATION
-
-README.md – Hướng dẫn đầy đủ (file này)
-
-QUICKSTART.md – Hướng dẫn nhanh
-
-📊 DATA FILES
-
-final_result_link.json – 7,579 links nhà hàng Hà Nội
-
-data/test_review_result.json – Kết quả test mẫu (1 nhà hàng)
-
-data/review_result.json – Kết quả scrape review
-
-data/checkpoint.json – Trạng thái resume
-
-data/scrape_errors.json – Log lỗi
-
-🚀 CÁCH SỬ DỤNG NHANH
-Bước 1: Test (BẮT BUỘC)
-cd review
-python3 test_review.py
-
-
-➡️ Khi browser mở ra:
-
-Đăng nhập Foody
-
-Thấy avatar
-
-Quay lại terminal → nhấn ENTER
-
-➡️ Xem kết quả trong:
-
-data/test_review_result.json
-
-
-❗ Nếu review ≤ 13 → login chưa đúng, KHÔNG chạy tiếp
-
-Bước 2: Chạy full
-python3 scrape_review_advanced.py
-
-🎯 DỮ LIỆU NHẬN ĐƯỢC
-
-Mỗi nhà hàng sẽ có đầy đủ danh sách review:
-
-🧾 Thông tin Review
-
-Review ID
-
-RestaurantID
-
-UserID
-
-Điểm đánh giá
-
-Nội dung review
-
-Thời gian tạo (relative time từ Foody)
-
-📊 VÍ DỤ OUTPUT
+```json
 {
-  "url": "https://www.foody.vn/ha-noi/pizza-hut-xuan-thuy",
+  "url": "...",
   "review": [
     {
-      "ID": "12345678",
-      "RestaurantID": "35998",
-      "UserID": "998877",
-      "Rating": "8.0",
-      "Content": "Pizza ngon, phục vụ ổn",
-      "CreatedAt": "3 ngày trước"
+      "ID": "...",
+      "RestaurantID": "...",
+      "UserID": "...",
+      "Rating": "...",
+      "Content": "...",
+      "CreatedAt": "..."
     }
   ],
   "initData": {}
 }
+```
 
-⛔ NHỮNG ĐIỀU KHÔNG ĐƯỢC LÀM
+## Experimental Protocol
 
-❌ Không chạy headless=True
+### Step 1: Validation (Mandatory)
 
-❌ Không nhấn ENTER khi chưa đăng nhập
+```bash
+python3 test_review.py
+```
+- Login when prompted
+- Press ENTER after successful login
+- Check output in:
+  `data/test_review_result.json`
 
-❌ Không scroll quá nhanh
+❗ If reviews ≤ 13 → login failed
 
-❌ Không mở thêm tab
+### Step 2: Full Scraping
 
-❌ Không đóng browser khi script đang chạy
+```bash
+python3 scrape_review_advanced.py
+```
 
-🐛 XỬ LÝ LỖI THƯỜNG GẶP
-❌ Chỉ scrape được 13 review
+---
 
-👉 Chưa đăng nhập Foody
-👉 Login lại, chạy lại script
+## Important Constraints
+- Requires manual login via browser
+- Headless mode is not supported
+- Without login → only ~13 reviews per restaurant
 
-❌ Browser không mở
-python3 -m playwright install chromium
+## Performance
+- Runtime: ~4–6 hours
+- Output size: ~300–500 MB
+- Scale: 100k+ reviews
 
-❌ File không được tạo
-mkdir data
+## Limitations
+- Manual login required
+- Sensitive to UI changes from Foody.vn
+- Requires controlled interaction speed
 
-🧠 GHI NHỚ QUAN TRỌNG NHẤT
+## Future Work
+- Session-based authentication automation
+- Distributed scraping
+- Integration with ML pipelines
 
-Scrape review Foody = BẮT BUỘC
+## Use Cases
+- Sentiment analysis
+- Recommendation systems
+- Behavioral analytics
+- Vietnamese NLP research
 
-Login thật
+## Reproducibility
 
-Browser thật
+```bash
+# Install dependencies
+pip install playwright
+python -m playwright install chromium
 
-Scroll thật
-
-❗ Thiếu 1 trong 3 → kết quả KHÔNG ĐÚNG
-
-📈 TIẾN ĐỘ DỰ KIẾN
-
-📊 Tổng nhà hàng: 7,579
-
-🧾 Tổng review: hàng trăm nghìn
-
-⏱️ Thời gian: ~4–6 giờ
-
-💾 Output: ~300–500 MB
-
-🎬 BẮT ĐẦU NGAY
-# 1. Test
+# Run test
 python3 test_review.py
 
-# 2. Xem thống kê
-python3 demo.py
-
-# 3. Chạy full
+# Run full pipeline
 python3 scrape_review_advanced.py
+```
 
-📁 KẾT QUẢ CUỐI CÙNG
+## Key Requirement
 
-File data/review_result.json chứa:
+- Scraping Foody requires:
 
-✅ Review đầy đủ của 7,579 nhà hàng
+✅ Real login
+✅ Real browser
+✅ Real scrolling
 
-✅ Không bị giới hạn 13 review
-
-✅ Format JSON thống nhất với initData
-
-✅ Sẵn sàng phân tích & gộp dataset
-
-🔥 Nếu test OK → chạy scrape_review_advanced.py
+❗ Missing any → invalid results

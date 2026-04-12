@@ -2,9 +2,9 @@ from playwright.sync_api import sync_playwright, TimeoutError
 import json
 import time
 
-INPUT_LINKS = "data/raw_data/foody_links_more_than_0_reviews.txt"
-OUTPUT_JSONL = "data/raw_data/reviews.jsonl"
-FAILED_LINKS = "dan/failed_links.txt"
+INPUT_LINKS = "F:/HUST/Năm ba/DS/prj/data/raw_data/foody_links_more_than_0_reviews.txt"
+OUTPUT_JSONL = "F:/HUST/Năm ba/DS/prj/data/raw_data/reviews.jsonl"
+FAILED_LINKS = "F:/HUST/Năm ba/DS/prj/data/scraper/error/failed_links.txt"
 
 
 def scrape_reviews_from_page(page, url):
@@ -65,13 +65,15 @@ def main():
         links = [line.strip() for line in f if line.strip()]
 
     with sync_playwright() as p, \
-         open(OUTPUT_JSONL, "w", encoding="utf-8") as out, \
-         open(FAILED_LINKS, "w", encoding="utf-8") as failed:
+         open(OUTPUT_JSONL, "a", encoding="utf-8") as out, \
+         open(FAILED_LINKS, "a", encoding="utf-8") as failed:
 
         browser = p.chromium.launch(headless=False)
         page = browser.new_page()
 
         for idx, url in enumerate(links, 1):
+            if idx not in [2353, 2354]:
+                continue
             print(f"\n[{idx}/{len(links)}] Scraping: {url}")
 
             try:

@@ -8,6 +8,30 @@ def scroll(page, max_scroll=10):
         page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
         time.sleep(1.5)
 
+def load_all_reviews(page, max_click=15):
+    for i in range(max_click):
+        try:
+            btn = page.wait_for_selector(
+                "a.fd-btn-more",
+                timeout=5000
+            )
+
+            # Scroll nút vào viewport
+            page.evaluate(
+                "(el) => el.scrollIntoView({behavior: 'smooth', block: 'center'})",
+                btn
+            )
+            time.sleep(1)
+
+            # Force click (bỏ qua visible check)
+            btn.click(force=True)
+            time.sleep(2)
+
+        except Exception as e:
+            print(f"❌ Stop at click {i}: {e}")
+            break
+
+        
 def extract_reviews(page):
     res_id = page.get_attribute("[data-res-id]", "data-res-id")
     reviews = []
@@ -37,10 +61,11 @@ with sync_playwright() as p:
     page.goto(TEST_URL)
     time.sleep(3)
 
-    scroll(page)
+    page = load_all_reviews(page)
+    input("👉 Tải hết cmt rồi nhấn ENTER...")
     reviews = extract_reviews(page)
 
-    with open("data/test_review_result.json", "w", encoding="utf-8") as f:
+    with open("F:/HUST/Năm ba/DS/prj/data/test_review_result.json", "w", encoding="utf-8") as f:
         json.dump({
             "url": TEST_URL,
             "review": reviews,

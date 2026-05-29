@@ -11,16 +11,16 @@ Conclusion: Parameter C = 0.1 yields the highest accuracy on the Validation set.
 
 2. Execution Commands
 
-Step 1: Train the Optimal Model (Train and Re-train)
+Step 1: Training step
 Run the following command to execute the training process with the optimal parameter C=0.1. The system will automatically combine the Train and Validation sets for a final re-training phase before exporting the .pkl model file into the outputs/ directory:
 
 python train.py --c 0.1 --version C0.1
 
-Step 2: Final Evaluation on the Test Set
+Step 2: Evaluation step
 Once the model file is generated from Step 1, run the following command to evaluate its performance independently on the Test set and export all visual results into the result/ directory:
 
 python evaluate.py --model-name svm_pipeline_C0.1.pkl
 
-Outputs generated in the result/ directory:
+--> Outputs generated in the result/ directory:
 - svm_evaluation_report.txt: A detailed report containing performance metrics (Precision, Recall, F1-score).
 - matrix_svm_pipeline_C0.1.png: The confusion matrix plot using a clean, professional blue color palette, containing only raw data counts as requested.

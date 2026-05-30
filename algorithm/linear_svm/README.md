@@ -6,10 +6,10 @@ The hyperparameter tuning process for parameter C was conducted by training mult
 -----------------------------------------------------------
 | C Parameter   |  5.0   |  1.0   |  0.01  |  0.1 (Optimal) |
 -----------------------------------------------------------
-| Macro F1-score| 73.49% | 74.23% | 73.96% | 74.69%         |
+| Macro F1-score| 74.02% | 74.33% | 73.54% | 74.94%         |
 -----------------------------------------------------------
 
-Conclusion: After comparing the Macro F1-scores across all configurations, parameter C = 0.1 yields the highest performance (74.69%). Therefore, svm_pipeline_C0.1.pkl is officially selected as the optimal model for the final system integration.
+Conclusion: After comparing the Macro F1-scores across all configurations, parameter C = 0.1 yields the highest performance (74.94%). Therefore, svm_pipeline_C0.1.pkl is officially selected as the optimal model for the final system integration.
 
 2. Execution Template for Replication
 
@@ -23,6 +23,6 @@ Step 2: Evaluation Phase
 Run the evaluation script by passing the optimal model name to independently calculate final metrics and export visual plots into the result/ directory:
 python evaluate.py --model-name svm_pipeline_C0.1.pkl
 
-Outputs generated in the result/ directory:
+--> Outputs generated in the result/ directory:
 - svm_evaluation_report.txt: A detailed text report containing comprehensive performance metrics (Precision, Recall, and the selection-base Macro F1-score).
 - matrix_svm_pipeline_C0.1.png: The confusion matrix plot rendered in a clean blue color palette, containing only raw data counts for clear interpretation.

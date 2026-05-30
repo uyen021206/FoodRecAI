@@ -1,0 +1,50 @@
+[
+  {
+    "config": {
+      "max_features": 5000,
+      "ngram_range": [
+        1,
+        1
+      ],
+      "C": 0.1,
+      "class_weight": null
+    },
+    "validation_macro_f1": 0.7578606439151342
+  },
+  {
+    "config": {
+      "max_features": 10000,
+      "ngram_range": [
+        1,
+        2
+      ],
+      "C": 1.0,
+      "class_weight": "balanced"
+    },
+    "validation_macro_f1": 0.7578809257889936
+  },
+  {
+    "config": {
+      "max_features": 30000,
+      "ngram_range": [
+        1,
+        2
+      ],
+      "C": 1.0,
+      "class_weight": "balanced"
+    },
+    "validation_macro_f1": 0.7678123656324901
+  },
+  {
+    "config": {
+      "max_features": 50000,
+      "ngram_range": [
+        1,
+        2
+      ],
+      "C": 10.0,
+      "class_weight": "balanced"
+    },
+    "validation_macro_f1": 0.7511761136633944
+  }
+]

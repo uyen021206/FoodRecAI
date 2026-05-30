@@ -1,7 +1,10 @@
 import argparse
 from html import escape
-from pathlib import Path
 import sys
+from pathlib import Path
+
+repo_root = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(repo_root))
 
 import joblib
 from sklearn.metrics import (
@@ -15,11 +18,15 @@ from sklearn.metrics import (
 )
 
 try:
-    from .dataset import LABELS, load_data_splits
-    from .train import DEFAULT_MODEL_PATH, train_model
+    from algorithm.logistic_regression.dataset import LABELS, load_data_splits
+    from algorithm.logistic_regression.train import DEFAULT_MODEL_PATH, train_model
 except ImportError:
-    from dataset import LABELS, load_data_splits
-    from train import DEFAULT_MODEL_PATH, train_model
+    try:
+        from .dataset import LABELS, load_data_splits
+        from .train import DEFAULT_MODEL_PATH, train_model
+    except ImportError:
+        from dataset import LABELS, load_data_splits
+        from train import DEFAULT_MODEL_PATH, train_model
 
 
 OUTPUT_DIR = Path(__file__).resolve().parent / "result"

@@ -3,7 +3,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.pipeline import Pipeline
 
-from .dataset import LABELS
+from algorithm.logistic_regression.dataset import LABELS
 
 
 def build_logistic_pipeline(

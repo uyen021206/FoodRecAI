@@ -4,7 +4,6 @@ from html import escape
 from pathlib import Path
 import sys
 
-# Ensure repository root is on sys.path when running this module as a script
 ROOT_DIR = Path(__file__).resolve().parents[2]
 if str(ROOT_DIR) not in sys.path:
     sys.path.insert(0, str(ROOT_DIR))
